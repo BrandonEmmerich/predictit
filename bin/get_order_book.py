@@ -57,7 +57,7 @@ if __name__ == '__main__':
     access_token = get_authorization_token()
     headers = {'Authorization': 'Bearer {access_token}'.format(access_token=access_token)}
     headers.update(settings.HEADERS_PREDICTIT)
-    import ipdb; ipdb.set_trace()
+    
 
     for contract_id in contracts:
         try:
