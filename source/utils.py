@@ -45,3 +45,16 @@ def get_list_from_db(query):
             print(e)
 
     return [tuple[0] for tuple in tuples]
+
+def get_object_from_db(query):
+    with psycopg2.connect(private.AWS_CONNECTION_STRING) as conn:
+        try:
+            cur = conn.cursor()
+            cur.execute(query)
+            object = cur.fetchone()[0]
+
+        except Exception as e:
+            conn.rollback()
+            print(e)
+
+    return object

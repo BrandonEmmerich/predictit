@@ -16,6 +16,8 @@ QUERY_GET_CONTRACTS = '''
     where is_active = TRUE
     '''
 
+QUERY_GET_BUY_PRICE = 'select min(price_per_share) as purchase_price from predictit.order_book where run_id = (select max(run_id) from predictit.order_book) and contract_id = {contract_id} and trade_type = 0;'
+
 QUERY_INSERT_CONTRACTS = '''
     INSERT INTO predictit.contracts
     (contract_id, contract_name, market_id, market_name, date_added, run_id, is_active, is_open)

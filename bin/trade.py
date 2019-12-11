@@ -43,11 +43,14 @@ if __name__ == '__main__':
     access_token = get_authorization_token()
     headers = {'Authorization': 'Bearer {access_token}'.format(access_token=access_token)}
     headers.update(settings.HEADERS_PREDICTIT)
-    
+
+    contract_id = '7729'
+    buy_price = utils.get_object_from_db(settings.QUERY_GET_BUY_PRICE.format(contract_id=contract_id))
+
     trade_data = {
       'quantity': '1',
-      'pricePerShare': '29',
-      'contractId': '7729',
+      'pricePerShare': str(buy_price),
+      'contractId': contract_id,
       'tradeType': '1'
     }
 
