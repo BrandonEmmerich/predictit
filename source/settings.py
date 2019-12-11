@@ -16,7 +16,7 @@ QUERY_GET_CONTRACTS = '''
     where is_active = TRUE
     '''
 
-QUERY_GET_BUY_PRICE = 'select min(price_per_share) as purchase_price from predictit.order_book where run_id = (select max(run_id) from predictit.order_book) and contract_id = {contract_id} and trade_type = 0;'
+QUERY_GET_BUY_PRICE = 'select (100*min(price_per_share))::int as purchase_price from predictit.order_book where run_id = (select max(run_id) from predictit.order_book) and contract_id = {contract_id} and trade_type = 0;'
 
 QUERY_INSERT_CONTRACTS = '''
     INSERT INTO predictit.contracts
@@ -46,7 +46,12 @@ QUERY_INSERT_TRADE = '''
     (%(run_id)s, %(date_added)s, %(contract_id)s, %(offer_id)s, %(price_per_share)s, %(remaining_quantity)s, %(quantity)s, %(trade_type)s, %(date_created)s, %(is_processed)s)
     '''
 
-
+QUERY_INSERT_FAILED_TRADE = '''
+    INSERT INTO predictit.failed_trades
+    (run_id, date_added, contract_id, price_per_share, quantity, trade_type, message)
+    VALUES
+    (%(run_id)s, %(date_added)s, %(contract_id)s, %(price_per_share)s, %(quantity)s, %(trade_type)s, %(message)s)
+    '''
 
 
 URL_CONTRACTS = 'https://www.predictit.org/api/Market/{market_id}/Contracts'
