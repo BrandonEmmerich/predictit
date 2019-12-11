@@ -1,5 +1,15 @@
 ALL_MARKET_IDS = ['3633', '3698', '3537']
 
+HEADERS_PREDICTIT = {
+    'Connection': 'keep-alive',
+    'Accept': 'application/json, text/plain, */*',
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36',
+    'Sec-Fetch-Site': 'same-origin',
+    'Sec-Fetch-Mode': 'cors',
+    'Accept-Encoding': 'gzip, deflate, br',
+    'Accept-Language': 'en-US,en;q=0.9',
+}
+
 QUERY_GET_CONTRACTS = '''
     select distinct contract_id
     from predictit.contracts

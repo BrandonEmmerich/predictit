@@ -26,7 +26,7 @@ if __name__ == '__main__':
     for market_id in settings.ALL_MARKET_IDS:
         try:
             date_added = utils.right_now()
-            contracts = requests.get(settings.URL_CONTRACTS.format(market_id=market_id)).json()
+            contracts = requests.get(url = settings.URL_CONTRACTS.format(market_id=market_id),headers = settings.HEADERS_PREDICTIT).json()
             for contract in contracts:
                 row = parse_contracts(contract)
                 bundled_data = utils.bundled_data(date_added, run_id)

@@ -70,8 +70,8 @@ if __name__ == '__main__':
     access_token = get_authorization_token()
 
     headers = {'Authorization': 'Bearer {access_token}'.format(access_token=access_token)}
-    #import ipdb; ipdb.set_trace()
-
+    headers.update(settings.HEADERS_PREDICTIT)
+    
     for market_id in settings.ALL_MARKET_IDS:
         try:
             date_added = utils.right_now()
