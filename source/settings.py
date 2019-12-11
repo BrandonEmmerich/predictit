@@ -37,6 +37,12 @@ QUERY_INSERT_MARKET_DATA = '''
     (%(date_added)s, %(run_id)s, %(market_id)s, %(contract_id)s, %(contract_name)s, %(data_timestamp)s, %(open)s, %(high)s, %(low)s, %(close_price)s, %(volume)s)
     '''
 
+QUERY_INSERT_TRADE = '''
+    INSERT INTO predictit.trade_log
+    (run_id, date_added, contract_id, offer_id, price_per_share, remaining_quantity, quantity, trade_type, date_created, is_processed)
+    VALUES
+    (%(run_id)s, %(date_added)s, %(contract_id)s, %(offer_id)s, %(price_per_share)s, %(remaining_quantity)s, %(quantity)s, %(trade_type)s, %(date_created)s, %(is_processed)s)
+    '''
 
 
 
@@ -44,3 +50,4 @@ QUERY_INSERT_MARKET_DATA = '''
 URL_CONTRACTS = 'https://www.predictit.org/api/Market/{market_id}/Contracts'
 URL_ORDER_BOOKS = 'https://www.predictit.org/api/Trade/{contract_id}/OrderBook'
 URL_MARKET_DATA = 'https://www.predictit.org/api/Public/GetMarketChartData/{market_id}'
+URL_SUBMIT_TRADE = 'https://www.predictit.org/api/Trade/SubmitTrade'
