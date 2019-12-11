@@ -58,3 +58,14 @@ def get_object_from_db(query):
             print(e)
 
     return object
+
+def get_authorization_token():
+    data = {
+        'email': private.PREDICTIT_EMAIL,
+        'password': private.PREDICTIT_PASSWORD,
+        'grant_type': 'password',
+        'rememberMe': 'true'
+    }
+    response = requests.post('https://www.predictit.org/api/Account/token', data=data)
+    access_token = response.json()['access_token']
+    return access_token

@@ -8,25 +8,11 @@ import private
 import settings
 import utils
 
-order_types = ['yesOrders', 'noOrders']
-
 params = (
     ('timespan', '24h'),
     ('maxContracts', '50'),
     ('showHidden', 'true'),
 )
-
-def get_authorization_token():
-    data = {
-        'email': private.PREDICTIT_EMAIL,
-        'password': private.PREDICTIT_PASSWORD,
-        'grant_type': 'password',
-        'rememberMe': 'true'
-    }
-    response = requests.post('https://www.predictit.org/api/Account/token', data=data)
-    access_token = response.json()['access_token']
-    return access_token
-
 
 def parse_market_data(data):
     row = {
@@ -45,7 +31,7 @@ def parse_market_data(data):
 if __name__ == '__main__':
     run_id = utils.generate_run_id()
 
-    access_token = get_authorization_token()
+    access_token = utils.get_authorization_token()
     headers = {'Authorization': 'Bearer {access_token}'.format(access_token=access_token)}
     headers.update(settings.HEADERS_PREDICTIT)
 

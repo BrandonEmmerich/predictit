@@ -8,17 +8,6 @@ import private
 import settings
 import utils
 
-def get_authorization_token():
-    data = {
-        'email': private.PREDICTIT_EMAIL,
-        'password': private.PREDICTIT_PASSWORD,
-        'grant_type': 'password',
-        'rememberMe': 'true'
-    }
-    response = requests.post('https://www.predictit.org/api/Account/token', data=data)
-    access_token = response.json()['access_token']
-
-    return access_token
 
 def parse_offer(offer):
     row = {
@@ -40,7 +29,7 @@ def submit_trade(trade_data):
 if __name__ == '__main__':
     run_id = utils.generate_run_id()
 
-    access_token = get_authorization_token()
+    access_token = utils.get_authorization_token()
     headers = {'Authorization': 'Bearer {access_token}'.format(access_token=access_token)}
     headers.update(settings.HEADERS_PREDICTIT)
 
