@@ -1,7 +1,10 @@
 import datetime
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 import psycopg2
 from psycopg2 import extras
 import requests
+import smtplib
 import time
 import uuid
 
@@ -45,3 +48,22 @@ def get_list_from_db(query):
             print(e)
 
     return [tuple[0] for tuple in tuples]
+
+def send_email(subject, body, recipient):
+	'''Send email from a gmail account'''
+
+	fromaddr = private.EMAIL_FROM_ADDRESS
+	toaddr = recipient
+	msg = MIMEMultipart('alternative', None, [MIMEText(body, 'html', 'utf-8')])
+	msg['From'] = fromaddr
+	msg['To'] = toaddr
+	msg['Subject'] = subject
+
+	body = body
+
+	server = smtplib.SMTP('smtp.gmail.com', 587)
+	server.starttls()
+	server.login(fromaddr, private.EMAIL_PASSWORD)
+	text = msg.as_string()
+	server.sendmail(fromaddr, toaddr, text)
+	server.quit()
