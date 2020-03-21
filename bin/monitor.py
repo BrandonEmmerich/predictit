@@ -179,7 +179,7 @@ def report_block(table, name):
     return block
 
 def create_email_body():
-    contracts_block = report_block(pricing, 'AOC')
+    contracts_block = report_block(pricing, '@potus')
 
     body = '''\
     <html>
@@ -200,13 +200,13 @@ def status_report(recipient):
     utils.send_email(subject, body, recipient)
 
 if __name__ == '__main__':
-    n_trials = 200
-    market_id = 6539
+    n_trials = 1000
+    market_id = 6564
     hours_remaining = get_remining_hours_in_market(market_id)
     market_open = get_market_open(market_id)
 
     api = twitter_api()
-    aoc = get_all_tweets(api, screen_name='@AOC')
+    aoc = get_all_tweets(api, screen_name='@potus')
     tweets_since_market_open = aoc[aoc['created_at'] > market_open].shape[0]
 
     distributions = get_poisson_distributions(input_data=aoc)
