@@ -201,7 +201,7 @@ def status_report(recipient):
 
 if __name__ == '__main__':
     n_trials = 1000
-    market_id = 6564
+    market_id = 6589
     hours_remaining = get_remining_hours_in_market(market_id)
     market_open = get_market_open(market_id)
 
