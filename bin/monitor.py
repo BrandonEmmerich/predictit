@@ -47,6 +47,16 @@ def twitter_api():
 
     return api
 
+def get_twitter_market_id(twitter_handle):
+    params = (
+        ('page', '1'),
+        ('itemsPerPage', '30'),
+    )
+
+    response = requests.get(f'https://www.predictit.org/api/Browse/Search/{twitter_handle}',params=params)
+
+    return response.json()['markets'][0]['marketId']
+
 def get_all_tweets(api, screen_name):
     all_tweets = []
 
@@ -202,12 +212,13 @@ def status_report(recipient):
 
 if __name__ == '__main__':
     n_trials = 10000
-    market_id = 6618
+    twitter_handle = '@potus'
+    market_id = get_twitter_market_id(twitter_handle)
     hours_remaining = get_remining_hours_in_market(market_id)
     market_open = get_market_open(market_id)
 
     api = twitter_api()
-    all_tweets = get_all_tweets(api, screen_name='@potus')
+    all_tweets = get_all_tweets(api, screen_name=twitter_handle)
     tweets_since_market_open = all_tweets[all_tweets['created_at'] > market_open].shape[0]
 
     distributions = get_poisson_distributions(input_data=all_tweets)
