@@ -105,23 +105,24 @@ def get_remining_hours_in_market(market_id):
 def get_distribution(day, hour):
     return distributions.query(f'hour == {hour}').query(f'day == {day}')['tweets'].tolist()
 
-def get_final_tweets(tweets_since_market_open, day_hours_to_step_through):
-    tweets = tweets_since_market_open
-
-    for day, hour in day_hours_to_step_through:
-        new_tweets = random.choice(get_distribution(day, hour))
-        tweets += new_tweets
-
-    return tweets
-
 def simulate_future_tweets(tweets_since_market_open, hours_remaining, n_trials):
-    results = []
+    all_periods = []
 
-    for i in range(n_trials):
-        final_tweets = get_final_tweets(tweets_since_market_open, hours_remaining)
-        results.append(final_tweets)
+    for day, hour in hours_remaining:
+        results = random.choices(get_distribution(day,hour), k=n_trials)
+        period = str(day) + '-' + str(hour)
+        df = pd.DataFrame(zip(np.arange(n_trials), results), columns=['trial_number', 'results'])
+        df['period'] = period
+        all_periods.append(df)
 
-    return results
+    simulation_results = pd.concat(all_periods) \
+        .groupby('trial_number') \
+        .agg({'results': 'sum'}) \
+        .reset_index() \
+        .assign(results = lambda x: x['results'] + tweets_since_market_open)['results'] \
+        .to_list()
+
+    return simulation_results
 
 def get_min_max(bounds):
     if 'fewer' in bounds:
@@ -200,16 +201,16 @@ def status_report(recipient):
     utils.send_email(subject, body, recipient)
 
 if __name__ == '__main__':
-    n_trials = 1000
+    n_trials = 10000
     market_id = 6618
     hours_remaining = get_remining_hours_in_market(market_id)
     market_open = get_market_open(market_id)
 
     api = twitter_api()
-    aoc = get_all_tweets(api, screen_name='@potus')
-    tweets_since_market_open = aoc[aoc['created_at'] > market_open].shape[0]
+    all_tweets = get_all_tweets(api, screen_name='@potus')
+    tweets_since_market_open = all_tweets[all_tweets['created_at'] > market_open].shape[0]
 
-    distributions = get_poisson_distributions(input_data=aoc)
+    distributions = get_poisson_distributions(input_data=all_tweets)
     simulation_results = simulate_future_tweets(tweets_since_market_open, hours_remaining, n_trials)
 
     contract_details = get_contract_details(market_id)
